@@ -1,0 +1,44 @@
+---
+- hosts: 35.224.213.90  
+  remote_user: swathivadlakonda
+  become: yes
+  become_method: sudo
+  tasks:
+  - name: download pip installer
+    get_url:
+      url: https://bootstrap.pypa.io/get-pip.py
+      dest: /tmp/get-pip.py
+  - name: install pip
+    shell: |
+      /usr/bin/python /tmp/get-pip.py
+  - name: install docker-py
+    pip:
+      name: docker-py
+      state: latest
+  - name: set selinux to permissive
+    selinux:
+      policy: targeted
+      state: permissive
+  - name: copy dockerfile
+    copy:
+      src: /home/swathivadlakonda/docker/Dockerfile
+      dest: /tmp
+    become_user: swathivadlakonda
+  - name: Log into DockerHub
+    docker_login:
+      username: swathivadlakonda
+      password: "*$1Swathi"
+  - name: Build Docker image from Dockerfile
+    docker_image:
+      build: 
+        path: /tmp
+      name: dochub 
+      state: present
+  - name: Tag and push to docker hub
+    docker_image:
+      name: dochub
+      repository: swathivadlakonda/dochub
+      push: yes
+      source: local
+      
+ 
