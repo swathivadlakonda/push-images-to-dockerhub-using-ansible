@@ -1,1 +1,19 @@
 https://www.codementor.io/@mamytianarakotomalala/how-to-deploy-docker-container-with-ansible-on-debian-8-mavm48kw0
+https://docs.ansible.com/ansible/latest/modules/docker_login_module.html(docker login module)
+
+
+ - name: Build dest image.
+      docker_image:
+        path: image-dest
+        name: image-dest     ///build-images///
+        tag: latest
+        state: present
+        force: true
+        pull: false
+        
+- name: Tag and push to docker hub
+  docker_image:
+    name: pacur/centos-7:56
+    repository: dcoppenhagan/myimage:7.56     ///push images to dockerhub///
+    push: yes
+    source: local
