@@ -26,8 +26,8 @@
     become_user: swathivadlakonda
   - name: Log into DockerHub
     docker_login:
-      username: swathivadlakonda
-      password: "*$1Swathi"
+      username: USERNAME
+      password: "PASSWD"
   - name: Build Docker image from Dockerfile
     docker_image:
       build: 
@@ -37,7 +37,7 @@
   - name: Tag and push to docker hub
     docker_image:
       name: dochub
-      repository: swathivadlakonda/dochub
+      repository: USERNAME/dochub
       push: yes
       source: local
       
